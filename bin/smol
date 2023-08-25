@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+use Mateusjatenee\SmolTest\Runner\Bootstrap;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+/** @var \Mateusjatenee\SmolTest\Configuration $configuration */
+$configuration = require getcwd() . '/configuration.php';
+
+$bootstrap = Bootstrap::make($configuration);
+$bootstrap->run();
+
+exit;
