@@ -6,7 +6,7 @@ use Mateusjatenee\SmolTest\Runner\Bootstrap;
 require __DIR__ . '/../vendor/autoload.php';
 
 /** @var \Mateusjatenee\SmolTest\Configuration $configuration */
-$configuration = require getcwd() . '/configuration.php';
+$configuration = require getcwd() . '/smol.php';
 
 $bootstrap = Bootstrap::make($configuration);
 $bootstrap->run();

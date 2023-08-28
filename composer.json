@@ -9,6 +9,11 @@
             "src/assertions.php"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Mateusjatenee\\SmolTest\\Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Mateus Guimarães",

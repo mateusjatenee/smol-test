@@ -16,17 +16,21 @@ class TestClassFinder
      */
     public static function fromArray(array $classes): array
     {
-        return array_map(function (string $class) {
+        $testClasses = [];
+
+        foreach ($classes as $class) {
             $reflection = new ReflectionClass($class);
 
             if (
                 ! $reflection->implementsInterface(Testable::class) &&
                 ! str_ends_with($class, 'Test')
             ) {
-                return null;
+                continue;
             }
 
-            return new TestClass($reflection);
-        }, $classes);
+            $testClasses[] = new TestClass($reflection);
+        }
+
+        return $testClasses;
     }
 }
