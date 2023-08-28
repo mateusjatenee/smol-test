@@ -6,10 +6,10 @@ namespace Mateusjatenee\SmolTest\Test;
 
 class TestDuration
 {
-public function __construct(
-    protected float $microseconds
-) {
-}
+    public function __construct(
+        protected float $microseconds
+    ) {
+    }
 
     public static function fromStart($start): self
     {
