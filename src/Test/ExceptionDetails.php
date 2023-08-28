@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Mateusjatenee\SmolTest\Test;
 
@@ -11,7 +13,8 @@ final readonly class ExceptionDetails
         public string $file,
         public int $line,
         public string $trace
-    ) {}
+    ) {
+    }
 
     public static function fromException(Exception $exception)
     {

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Mateusjatenee\SmolTest\Tagging;
 
@@ -8,8 +10,8 @@ use ReflectionClass;
 class TestClassFinder
 {
     /**
-     * @param  array  $classes
      * @return TestClass[]
+     *
      * @throws \ReflectionException
      */
     public static function fromArray(array $classes): array

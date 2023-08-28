@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Mateusjatenee\SmolTest\Test;
 
@@ -6,8 +8,7 @@ class TestDuration
 {
 public function __construct(
     protected float $microseconds
-)
-{
+) {
 }
 
     public static function fromStart($start): self

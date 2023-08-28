@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Mateusjatenee\SmolTest\Runner;
 
-use IteratorAggregate;
 use Mateusjatenee\SmolTest\Failure;
-use Traversable;
 
 class FailedTestsCollection
 {

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Mateusjatenee\SmolTest\Test;
 
@@ -9,8 +11,7 @@ class TestMethod
 {
     public function __construct(
         public ReflectionMethod $method
-    )
-    {
+    ) {
     }
 
     public function __call(string $name, array $arguments)

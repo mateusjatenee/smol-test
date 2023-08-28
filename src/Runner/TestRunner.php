@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Mateusjatenee\SmolTest\Runner;
 
-use ReflectionClass;
-use Symfony\Component\Finder\Finder;
 use Mateusjatenee\SmolTest\Tagging\TestClassFinder;
+use Symfony\Component\Finder\Finder;
 
 class TestRunner
 {
@@ -34,7 +33,6 @@ class TestRunner
 
         $diff = array_diff(get_declared_classes(), $loadedClasses);
         $testClasses = TestClassFinder::fromArray($diff);
-
 
         foreach ($testClasses as $testClass) {
             $testMethods = $testClass->methods();

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Mateusjatenee\SmolTest\Test;
 
@@ -10,8 +12,7 @@ class TestClass
 {
     public function __construct(
         public ReflectionClass $reflectionClass
-    )
-    {
+    ) {
     }
 
     public function newReflectionClass()
