@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Mateusjatenee\SmolTest\Runner;
+namespace Mateusjatenee\SmolTest\Test;
 
 use Mateusjatenee\SmolTest\Failure;
 
 readonly class TestRun
 {
     public function __construct(
-        public string $className,
-        public string $methodName,
-        public int $duration,
+        public TestClass $class,
+        public TestMethod $method,
+        public TestDuration $duration,
         public ?Failure $failure = null
     ) {
     }
@@ -28,11 +28,6 @@ readonly class TestRun
 
     public function readableMethodName(): string
     {
-        return str($this->methodName)
-            ->replace('test', '')
-            ->replace('_', ' ')
-            ->trim()
-            ->ucfirst()
-            ->__toString();
+        return $this->method->nameForHumans();
     }
 }

@@ -10,7 +10,7 @@ use Mateusjatenee\SmolTest\Runner\Printer;
 final class Configuration
 {
     /**
-     * @param  string[]  $testSuites
+     * @param  \Mateusjatenee\SmolTest\Runner\TestSuite[]  $testSuites
      */
     public function __construct(
         public array $testSuites,

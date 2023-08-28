@@ -6,6 +6,11 @@ namespace Mateusjatenee\SmolTest\Runner;
 
 use Mateusjatenee\SmolTest\AssertionFailedException;
 use Mateusjatenee\SmolTest\Failure;
+use Mateusjatenee\SmolTest\Test\ExceptionDetails;
+use Mateusjatenee\SmolTest\Test\TestClass;
+use Mateusjatenee\SmolTest\Test\TestDuration;
+use Mateusjatenee\SmolTest\Test\TestMethod;
+use Mateusjatenee\SmolTest\Test\TestRun;
 
 class RunSingleTest
 {
@@ -13,23 +18,24 @@ class RunSingleTest
     {
     }
 
-    public function handle(string $testClass, \ReflectionMethod $method, Printer $printer): TestRun
+    public function handle(TestClass $class, TestMethod $method, Printer $printer): TestRun
     {
         $start = microtime(true);
 
         try {
-            $method->invoke(new $testClass);
+            $method->invoke($class->newReflectionClass());
         } catch (AssertionFailedException $exception) {
-            $failure = new Failure($testClass, $exception->getMessage(), $exception->getFile(),
-                $exception->getLine());
+            $failure = new Failure(
+                $class, ExceptionDetails::fromException($exception)
+            );
         }
 
-        $timeInMiliseconds = number_format(ceil((microtime(true) - $start) * 1000));
+        $duration = TestDuration::fromStart($start);
 
         return new TestRun(
-            $testClass,
-            $method->getName(),
-            (int) $timeInMiliseconds,
+            $class,
+            $method,
+            $duration,
             $failure ?? null
         );
     }

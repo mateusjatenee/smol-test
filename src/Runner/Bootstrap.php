@@ -24,7 +24,7 @@ class Bootstrap
         require $this->config->autoloaderPath;
 
         foreach ($this->config->testSuites as $testSuite) {
-            $this->testRunner->run(new TestSuite($testSuite));
+            $this->testRunner->run($testSuite);
         }
     }
 }

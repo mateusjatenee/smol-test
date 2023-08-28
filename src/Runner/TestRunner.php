@@ -6,6 +6,7 @@ namespace Mateusjatenee\SmolTest\Runner;
 
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
+use Mateusjatenee\SmolTest\Tagging\TestClassFinder;
 
 class TestRunner
 {
@@ -20,32 +21,27 @@ class TestRunner
         $testFiles = $this->getTestFiles($suite->path);
 
         foreach ($testFiles as $file) {
-            $this->runTest($file);
+            $this->runTestsForFile($file);
         }
 
         $this->printer->showFailedTests($this->failedTests);
     }
 
-    protected function runTest(string $file): void
+    protected function runTestsForFile(string $file): void
     {
         $loadedClasses = get_declared_classes();
         require $file;
 
         $diff = array_diff(get_declared_classes(), $loadedClasses);
-        $testClasses = array_filter($diff, fn ($class) => str_ends_with($class, 'Test'));
+        $testClasses = TestClassFinder::fromArray($diff);
+
 
         foreach ($testClasses as $testClass) {
-            $reflection = new ReflectionClass($testClass);
-            $testMethods = array_filter($reflection->getMethods(),
-                fn ($method) => str_starts_with($method->getName(), 'test'));
+            $testMethods = $testClass->methods();
 
             foreach ($testMethods as $method) {
-                $testRun = (new RunSingleTest())->handle($testClass, $method, $this->printer);
-                $this->printer->testRun($testRun);
-
-                if ($testRun->failed()) {
-                    $this->failedTests->push($testRun->failure);
-                }
+                (new RunTestMethod($this->printer, $this->failedTests))
+                    ->handle($testClass, $method);
             }
         }
     }
