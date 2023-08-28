@@ -17,7 +17,7 @@ class TestRunner
 
     public function run(TestSuite $suite): void
     {
-        $testFiles = $this->getTestFiles($suite->path);
+        $testFiles = $this->getTestFilesPaths($suite->path);
 
         foreach ($testFiles as $file) {
             $this->runTestsForFile($file);
@@ -33,6 +33,8 @@ class TestRunner
         $testClasses = TestClassFinder::fromArray($diff);
 
         foreach ($testClasses as $testClass) {
+            $this->printer->class($testClass);
+
             $testMethods = $testClass->methods();
 
             foreach ($testMethods as $method) {
@@ -45,16 +47,15 @@ class TestRunner
     /**
      * @return string[]
      */
-    protected function getTestFiles(string $path): array
+    protected function getTestFilesPaths(string $path): array
     {
         $finder = new Finder();
         $finder->files()->in($path);
         $tests = [];
 
+        // Since we filter by files later, we can just use the iterator.
         foreach ($finder as $file) {
-            if (str_ends_with($file->getFilename(), 'Test.php')) {
-                $tests[] = $file->getRealPath();
-            }
+            $tests[] = $file->getRealPath();
         }
 
         return $tests;

@@ -18,7 +18,7 @@ class Bootstrap
         return new static($configuration);
     }
 
-    public function run()
+    public function run(): void
     {
         require $this->config->autoloaderPath;
 
@@ -30,6 +30,5 @@ class Bootstrap
         }
 
         $this->config->printer->showFailedTests($failedTests);
-
     }
 }

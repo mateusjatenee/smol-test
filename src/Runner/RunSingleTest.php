@@ -26,7 +26,7 @@ class RunSingleTest
             $method->invoke($class->newReflectionClass());
         } catch (AssertionFailedException $exception) {
             $failure = new Failure(
-                $class, ExceptionDetails::fromException($exception)
+                $class, $method, ExceptionDetails::fromException($exception)
             );
         }
 

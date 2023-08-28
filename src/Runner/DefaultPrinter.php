@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Mateusjatenee\SmolTest\Runner;
 
 use Mateusjatenee\SmolTest\Failure;
+use Mateusjatenee\SmolTest\Test\TestClass;
 use Mateusjatenee\SmolTest\Test\TestRun;
 use function Termwind\render;
 
@@ -14,8 +15,8 @@ class DefaultPrinter implements Printer
     {
         render("
                  <div>
-                    <div class=\"px-1 bg-green-600\">Success</div>
-                    <em class=\"ml-1\">{$testRun->readableMethodName()}</em>
+                    <div class=\"px-1 text-green-600\">✓</div>
+                    <span class=\"ml-1\">{$testRun->readableMethodName()}</span>
                     <span class='ml-1'><b>{$testRun->duration->miliseconds()}ms</b></span>
                 </div>
         ");
@@ -25,16 +26,21 @@ class DefaultPrinter implements Printer
     {
         render("
                  <div>
-                    <div class=\"px-1 bg-red-600\">FAILURE</div>
+                    <div class=\"px-1 text-red-600\">⨯</div>
                     <em class=\"ml-1\">{$testRun->readableMethodName()}</em>
                     <span class='ml-1'><b>{$testRun->duration->miliseconds()}ms</b></span>
                 </div>
         ");
     }
 
-    public function class(ClassDetails $class)
+    public function class(TestClass $class)
     {
-        // TODO: Implement class() method.
+        render("
+            <div class='mt-1'>
+                <div class='bg-teal-600 px-1'>Test</div>
+                <b class='ml-1'>{$class->name()}</b>
+            </div>
+        ");
     }
 
     public function testRun(TestRun $testRun): void
@@ -53,11 +59,22 @@ class DefaultPrinter implements Printer
         $failureStrings = [];
 
         foreach ($failedTests->failures as $failure) {
+            $trace = str($failure->exceptionDetails->trace)
+                ->replace("\n", '<br>')
+                ->toString();
+
             $failureStrings[] = "
+                    <hr class='text-red-500'>
                     <div>
-                        <em class=\"px-1\">{$failure->testClass->name()}::{$failure->exceptionDetails->file}</em>
+                        <div class='bg-red-500 px-1'>FAILED</div>
+                        <b class='px-1'>{$failure->testClass->name()}</b>
+                        <span class='px-1'>></span>
+                        <span>{$failure->testMethod->nameForHumans()}</span>
                         <div>
-                            <span class=\"px-1 bg-red-600\">{$failure->exceptionDetails->message}</span>
+                            <span class=\"px-1 bg-red-700\">{$failure->exceptionDetails->message}</span>
+                        </div>
+                        <div>
+                            {$trace}
                         </div>
                     </div>
             ";
