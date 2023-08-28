@@ -25,7 +25,7 @@ class TestClassFinderTest
     }
 
     #[Test]
-    public function it_finds_classes_that_have_the_test_suffix()
+    public function it_finds_classes_that_have_the_test_suffix(): void
     {
         $foundClasses = TestClassFinder::fromArray([EndsInTest::class]);
 
@@ -34,7 +34,7 @@ class TestClassFinderTest
     }
 
     #[Test]
-    public function it_does_not_find_classes_that_do_not_end_in_test()
+    public function it_does_not_find_classes_that_do_not_end_in_test(): void
     {
         $foundClasses = TestClassFinder::fromArray([WrongName::class]);
 
