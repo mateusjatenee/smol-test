@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Mateusjatenee\SmolTest;
 
-use Mateusjatenee\SmolTest\Runner\DefaultPrinter;
-use Mateusjatenee\SmolTest\Runner\Printer;
+use Mateusjatenee\SmolTest\Runner\Output\DefaultPrinter;
+use Mateusjatenee\SmolTest\Runner\Output\Printer;
 
 final class Configuration
 {

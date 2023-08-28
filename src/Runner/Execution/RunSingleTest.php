@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Mateusjatenee\SmolTest\Runner;
+namespace Mateusjatenee\SmolTest\Runner\Execution;
 
 use Mateusjatenee\SmolTest\AssertionFailedException;
-use Mateusjatenee\SmolTest\Failure;
+use Mateusjatenee\SmolTest\Runner\Failure;
+use Mateusjatenee\SmolTest\Runner\Output\Printer;
 use Mateusjatenee\SmolTest\Test\ExceptionDetails;
 use Mateusjatenee\SmolTest\Test\TestClass;
 use Mateusjatenee\SmolTest\Test\TestDuration;
@@ -19,12 +20,18 @@ class RunSingleTest
     {
     }
 
-    public function handle(TestClass $class, TestMethod $method, Printer $printer): TestRun
+    public function handle(TestClass $class, TestMethod $method): TestRun
     {
         $start = microtime(true);
 
+        $instance = $class->newReflectionClass();
+
+        if (method_exists($instance, 'beforeEach')) {
+            $instance->beforeEach();
+        }
+
         try {
-            $method->invoke($class->newReflectionClass());
+            $method->invoke($instance);
         } catch (AssertionFailedException $exception) {
             $failure = new Failure(
                 $class, $method, ExceptionDetails::fromException($exception)
@@ -35,7 +42,11 @@ class RunSingleTest
             );
         }
 
-        $duration = TestDuration::fromStart($start);
+        $duration = TestDuration::sinceStart($start);
+
+        if (method_exists($instance, 'afterEach')) {
+            $instance->afterEach();
+        }
 
         return new TestRun(
             $class,

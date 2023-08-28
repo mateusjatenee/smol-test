@@ -11,7 +11,7 @@ class TestDuration
     ) {
     }
 
-    public static function fromStart($start): self
+    public static function sinceStart($start): self
     {
         return new static(microtime(true) - $start);
     }

@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Mateusjatenee\SmolTest\Runner;
+namespace Mateusjatenee\SmolTest\Runner\Execution;
 
+use Mateusjatenee\SmolTest\Runner\FailedTestsCollection;
+use Mateusjatenee\SmolTest\Runner\Output\Printer;
 use Mateusjatenee\SmolTest\Test\TestClass;
 use Mateusjatenee\SmolTest\Test\TestMethod;
 
@@ -19,7 +21,7 @@ final readonly class RunTestMethod
     {
         // TODO: handle data providers/multiple tests
 
-        $testRun = (new RunSingleTest())->handle($testClass, $method, $this->printer);
+        $testRun = (new RunSingleTest())->handle($testClass, $method);
 
         $this->printer->testRun($testRun);
 

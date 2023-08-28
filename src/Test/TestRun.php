@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Mateusjatenee\SmolTest\Test;
 
-use Mateusjatenee\SmolTest\Failure;
+use Mateusjatenee\SmolTest\Runner\Failure;
 
 readonly class TestRun
 {

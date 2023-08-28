@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mateusjatenee\SmolTest;
+namespace Mateusjatenee\SmolTest\Runner;
 
 use Mateusjatenee\SmolTest\Test\ExceptionDetails;
 use Mateusjatenee\SmolTest\Test\TestClass;

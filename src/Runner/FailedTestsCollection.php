@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Mateusjatenee\SmolTest\Runner;
 
-use Mateusjatenee\SmolTest\Failure;
-
 class FailedTestsCollection
 {
     /**
@@ -19,5 +17,10 @@ class FailedTestsCollection
     public function push(Failure $failure): void
     {
         $this->failures[] = $failure;
+    }
+
+    public function count(): int
+    {
+        return count($this->failures);
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Mateusjatenee\SmolTest\Runner;
 
+use Mateusjatenee\SmolTest\Runner\Execution\RunTestsForClass;
+use Mateusjatenee\SmolTest\Runner\Output\Printer;
 use Mateusjatenee\SmolTest\Tagging\TestClassFinder;
 use Symfony\Component\Finder\Finder;
 
@@ -33,14 +35,7 @@ class TestRunner
         $testClasses = TestClassFinder::fromArray($diff);
 
         foreach ($testClasses as $testClass) {
-            $this->printer->class($testClass);
-
-            $testMethods = $testClass->methods();
-
-            foreach ($testMethods as $method) {
-                (new RunTestMethod($this->printer, $this->failedTests))
-                    ->handle($testClass, $method);
-            }
+            (new RunTestsForClass($this->printer, $this->failedTests))->handle($testClass);
         }
     }
 
