@@ -10,21 +10,26 @@ class Bootstrap
 {
     public function __construct(
         protected Configuration $config,
-        protected TestRunner $testRunner
     ) {
     }
 
     public static function make(Configuration $configuration): self
     {
-        return new static($configuration, new TestRunner($configuration->printer));
+        return new static($configuration);
     }
 
     public function run()
     {
         require $this->config->autoloaderPath;
 
+        $failedTests = new FailedTestsCollection();
+        $testRunner = new TestRunner($this->config->printer, $failedTests);
+
         foreach ($this->config->testSuites as $testSuite) {
-            $this->testRunner->run($testSuite);
+            $testRunner->run($testSuite);
         }
+
+        $this->config->printer->showFailedTests($failedTests);
+
     }
 }

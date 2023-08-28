@@ -11,19 +11,17 @@ class TestRunner
 {
     public function __construct(
         protected Printer $printer,
-        protected FailedTestsCollection $failedTests = new FailedTestsCollection()
+        protected FailedTestsCollection $failedTests
     ) {
     }
 
-    public function run(TestSuite $suite)
+    public function run(TestSuite $suite): void
     {
         $testFiles = $this->getTestFiles($suite->path);
 
         foreach ($testFiles as $file) {
             $this->runTestsForFile($file);
         }
-
-        $this->printer->showFailedTests($this->failedTests);
     }
 
     protected function runTestsForFile(string $file): void
