@@ -11,6 +11,7 @@ use Mateusjatenee\SmolTest\Test\TestClass;
 use Mateusjatenee\SmolTest\Test\TestDuration;
 use Mateusjatenee\SmolTest\Test\TestMethod;
 use Mateusjatenee\SmolTest\Test\TestRun;
+use Throwable;
 
 class RunSingleTest
 {
@@ -25,6 +26,10 @@ class RunSingleTest
         try {
             $method->invoke($class->newReflectionClass());
         } catch (AssertionFailedException $exception) {
+            $failure = new Failure(
+                $class, $method, ExceptionDetails::fromException($exception)
+            );
+        } catch (Throwable $exception) {
             $failure = new Failure(
                 $class, $method, ExceptionDetails::fromException($exception)
             );

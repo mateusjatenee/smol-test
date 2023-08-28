@@ -71,7 +71,7 @@ class DefaultPrinter implements Printer
                         <span class='px-1'>></span>
                         <span>{$failure->testMethod->nameForHumans()}</span>
                         <div>
-                            <span class=\"px-1 bg-red-700\">{$failure->exceptionDetails->message}</span>
+                            <span class=\"px-1 bg-red-700\">{$failure->exceptionDetails->className} {$failure->exceptionDetails->message}</span>
                         </div>
                         <div>
                             {$trace}
