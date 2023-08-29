@@ -6,7 +6,6 @@ namespace Mateusjatenee\SmolTest\Runner\Execution;
 
 use Mateusjatenee\SmolTest\AssertionFailedException;
 use Mateusjatenee\SmolTest\Runner\Failure;
-use Mateusjatenee\SmolTest\Runner\Output\Printer;
 use Mateusjatenee\SmolTest\Test\ExceptionDetails;
 use Mateusjatenee\SmolTest\Test\TestClass;
 use Mateusjatenee\SmolTest\Test\TestDuration;
@@ -14,31 +13,27 @@ use Mateusjatenee\SmolTest\Test\TestMethod;
 use Mateusjatenee\SmolTest\Test\TestRun;
 use Throwable;
 
-class RunSingleTest
+class RunSingleTest implements RunsTests
 {
-    public function __construct()
-    {
-    }
-
-    public function handle(TestClass $class, TestMethod $method, array $arguments = []): TestRun
+    public function handle(TestClass $testClass, TestMethod $testMethod): TestRun
     {
         $start = microtime(true);
 
-        $instance = $class->newReflectionClass();
+        $instance = $testClass->newReflectionClass();
 
         if (method_exists($instance, 'beforeEach')) {
             $instance->beforeEach();
         }
 
         try {
-            $method->invoke($instance, ...$arguments);
+            $testMethod->invoke($instance, ...$testMethod->arguments);
         } catch (AssertionFailedException $exception) {
             $failure = new Failure(
-                $class, $method, ExceptionDetails::fromException($exception)
+                $testClass, $testMethod, ExceptionDetails::fromException($exception)
             );
         } catch (Throwable $exception) {
             $failure = new Failure(
-                $class, $method, ExceptionDetails::fromException($exception)
+                $testClass, $testMethod, ExceptionDetails::fromException($exception)
             );
         }
 
@@ -48,11 +43,13 @@ class RunSingleTest
             $instance->afterEach();
         }
 
-        return new TestRun(
-            $class,
-            $method,
+        $testRun = new TestRun(
+            $testClass,
+            $testMethod,
             $duration,
             $failure ?? null
         );
+
+        return $testRun;
     }
 }

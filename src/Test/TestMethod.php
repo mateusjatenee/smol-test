@@ -10,7 +10,8 @@ use ReflectionMethod;
 class TestMethod
 {
     public function __construct(
-        public ReflectionMethod $method
+        public ReflectionMethod $method,
+        public array $arguments = []
     ) {
     }
 
