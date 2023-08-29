@@ -49,23 +49,12 @@ final readonly class RunTestMethod
     protected function handleSingleTest(TestClass $testClass, TestMethod $method): void
     {
         $testRun = $this->runSingleTest->handle($testClass, $method);
-        $this->printer->testRun($testRun);
-
-        if ($testRun->failed()) {
-            $this->failedTestsCollection->push($testRun->failure);
-        }
-
     }
 
     protected function handleMultipleTests(Dataset $dataset, TestClass $testClass, TestMethod $method): void
     {
         foreach ($dataset->asArray() as $key => $data) {
             $testRun = $this->runSingleTest->handle($testClass, $method, $data);
-            $this->printer->testRun($testRun, $key ? (string) $key : null);
-
-            if ($testRun->failed()) {
-                $this->failedTestsCollection->push($testRun->failure);
-            }
         }
     }
 }

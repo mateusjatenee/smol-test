@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Mateusjatenee\SmolTest\Test;
 
-use Error;
+use Throwable;
 
 final readonly class ExceptionDetails
 {
@@ -17,7 +17,7 @@ final readonly class ExceptionDetails
     ) {
     }
 
-    public static function fromException(Error $exception): self
+    public static function fromException(Throwable $exception): self
     {
         return new self(
             get_class($exception),

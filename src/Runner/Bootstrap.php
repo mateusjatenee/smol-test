@@ -6,11 +6,13 @@ namespace Mateusjatenee\SmolTest\Runner;
 
 use Mateusjatenee\SmolTest\Argument;
 use Mateusjatenee\SmolTest\Configuration;
+use Mateusjatenee\SmolTest\Event\Bus;
+use Mateusjatenee\SmolTest\Event\TestFailed;
+use Mateusjatenee\SmolTest\Event\TestFinished;
 
 class Bootstrap
 {
     /**
-     * @param  \Mateusjatenee\SmolTest\Configuration  $config
      * @param  Argument[]  $arguments
      */
     public function __construct(
@@ -29,7 +31,12 @@ class Bootstrap
         require $this->config->autoloaderPath;
 
         $failedTests = new FailedTestsCollection();
+        $finishedTests = new FinishedTestsCollection();
         $testRunner = new TestRunner($this->config->printer, $failedTests);
+
+        Bus::listen(TestFailed::class, fn (TestFailed $event) => $failedTests->push($event->failure));
+        Bus::listen(TestFinished::class, fn (TestFinished $event) => $finishedTests->push($event->testRun));
+        Bus::listen(TestFinished::class, fn (TestFinished $event) => $this->config->printer->testRun($event->testRun));
 
         foreach ($this->config->testSuites as $testSuite) {
             $testRunner->run($testSuite, $this->arguments);

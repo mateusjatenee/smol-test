@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Mateusjatenee\SmolTest\Runner\Execution;
 
 use Mateusjatenee\SmolTest\AssertionFailedException;
+use Mateusjatenee\SmolTest\Event\Bus;
+use Mateusjatenee\SmolTest\Event\TestFailed;
+use Mateusjatenee\SmolTest\Event\TestFinished;
 use Mateusjatenee\SmolTest\Runner\Failure;
 use Mateusjatenee\SmolTest\Test\ExceptionDetails;
 use Mateusjatenee\SmolTest\Test\TestClass;
@@ -31,10 +34,13 @@ class RunSingleTest implements RunsTests
             $failure = new Failure(
                 $testClass, $testMethod, ExceptionDetails::fromException($exception)
             );
+            Bus::dispatch(new TestFailed($failure));
         } catch (Throwable $exception) {
             $failure = new Failure(
                 $testClass, $testMethod, ExceptionDetails::fromException($exception)
             );
+
+            Bus::dispatch(new TestFailed($failure));
         }
 
         $duration = TestDuration::sinceStart($start);
@@ -49,6 +55,8 @@ class RunSingleTest implements RunsTests
             $duration,
             $failure ?? null
         );
+
+        Bus::dispatch(new TestFinished($testRun));
 
         return $testRun;
     }
