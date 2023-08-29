@@ -21,16 +21,14 @@ final readonly class RunTestMethod
 
     public function handle(TestClass $testClass, TestMethod $method): void
     {
+//        $dataset = $this->getDataset($testClass);
         $dataset = null;
-        if (str_contains($testClass->reflectionClass->getName(), 'ClassToBeTested')) {
-            $method = $testClass->methods()[0];
-
-            if ($attributes = $method->getAttributes(DataProvider::class)) {
-                /** @var DataProvider $dataProvider */
-                $dataProvider = $attributes[0]->newInstance();
-                $methodName = $dataProvider->methodName;
-                $dataset = $testClass->reflectionClass->getName()::$methodName();
-            }
+        
+        if ($attributes = $method->getAttributes(DataProvider::class)) {
+            /** @var DataProvider $dataProvider */
+            $dataProvider = $attributes[0]->newInstance();
+            $methodName = $dataProvider->methodName;
+            $dataset = $testClass->reflectionClass->getName()::$methodName();
         }
 
         if (! $dataset) {
@@ -39,10 +37,9 @@ final readonly class RunTestMethod
         } else {
             foreach ($dataset as $key => $data) {
                 $testRun = $this->runSingleTest->handle($testClass, $method, $data);
-                $this->printer->testRun($testRun, $key ? (string) $key: null);
+                $this->printer->testRun($testRun, $key ? (string) $key : null);
             }
         }
-
 
         if ($testRun->failed()) {
             $this->failedTestsCollection->push($testRun->failure);
