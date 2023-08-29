@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
 
+use Mateusjatenee\SmolTest\Argument;
 use Mateusjatenee\SmolTest\Runner\Bootstrap;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -8,7 +9,8 @@ require __DIR__ . '/../vendor/autoload.php';
 /** @var \Mateusjatenee\SmolTest\Configuration $configuration */
 $configuration = require getcwd() . '/smol.php';
 
-$bootstrap = Bootstrap::make($configuration);
+$arguments = Argument::create($_SERVER['argv']);
+$bootstrap = Bootstrap::make($configuration, $arguments);
 $bootstrap->run();
 
 exit;

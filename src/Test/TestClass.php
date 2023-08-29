@@ -20,6 +20,9 @@ class TestClass
         return $this->reflectionClass->newInstance();
     }
 
+    /**
+     * @return \Mateusjatenee\SmolTest\Test\TestMethod[]
+     */
     public function methods(): array
     {
         $methods = array_filter(

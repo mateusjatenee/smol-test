@@ -12,7 +12,7 @@ interface Printer
 {
     public function class(TestClass $class);
 
-    public function testRun(TestRun $testRun);
+    public function testRun(TestRun $testRun, mixed $key = null);
 
     public function showFailedTests(FailedTestsCollection $failedTests);
 }

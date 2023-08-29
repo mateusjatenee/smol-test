@@ -24,5 +24,8 @@
         "symfony/finder": "^6.3",
         "nunomaduro/termwind": "^1.15",
         "illuminate/support": "^10.20"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.6"
     }
 }

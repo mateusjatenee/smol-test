@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mateusjatenee\SmolTest\Runner;
 
+use Mateusjatenee\SmolTest\Argument;
 use Mateusjatenee\SmolTest\Runner\Execution\RunTestsForClass;
 use Mateusjatenee\SmolTest\Runner\Output\Printer;
 use Mateusjatenee\SmolTest\Tagging\TestClassFinder;
@@ -17,9 +18,18 @@ class TestRunner
     ) {
     }
 
-    public function run(TestSuite $suite): void
+    /**
+     * @param  \Mateusjatenee\SmolTest\Runner\TestSuite  $suite
+     * @param  Argument[]  $arguments
+     * @return void
+     */
+    public function run(TestSuite $suite, array $arguments): void
     {
-        $testFiles = $this->getTestFilesPaths($suite->path);
+        $fileFilter = collect($arguments)
+            ->where(fn (Argument $argument) => $argument->name === '--filter')
+            ->first();
+
+        $testFiles = $this->getTestFilesPaths($suite->path, $fileFilter?->value);
 
         foreach ($testFiles as $file) {
             $this->runTestsForFile($file);
@@ -42,7 +52,7 @@ class TestRunner
     /**
      * @return string[]
      */
-    protected function getTestFilesPaths(string $path): array
+    protected function getTestFilesPaths(string $path, ?string $filter = null): array
     {
         $finder = new Finder();
         $finder->files()->in($path);
@@ -50,6 +60,12 @@ class TestRunner
 
         // Since we filter by files later, we can just use the iterator.
         foreach ($finder as $file) {
+            if ($filter) {
+                if (! str_contains($file->getRealPath(), $filter)) {
+                    continue;
+                }
+            }
+
             $tests[] = $file->getRealPath();
         }
 

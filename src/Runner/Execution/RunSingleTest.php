@@ -20,7 +20,7 @@ class RunSingleTest
     {
     }
 
-    public function handle(TestClass $class, TestMethod $method): TestRun
+    public function handle(TestClass $class, TestMethod $method, array $arguments = []): TestRun
     {
         $start = microtime(true);
 
@@ -31,7 +31,7 @@ class RunSingleTest
         }
 
         try {
-            $method->invoke($instance);
+            $method->invoke($instance, ...$arguments);
         } catch (AssertionFailedException $exception) {
             $failure = new Failure(
                 $class, $method, ExceptionDetails::fromException($exception)

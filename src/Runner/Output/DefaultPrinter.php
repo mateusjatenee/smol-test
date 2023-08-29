@@ -12,12 +12,14 @@ use function Termwind\render;
 
 class DefaultPrinter implements Printer
 {
-    public function success(TestRun $testRun): void
+    public function success(TestRun $testRun, mixed $key = null): void
     {
+        $dataset = $key ? " with dataset {$key}" : null;
+
         render("
                  <div>
                     <div class=\"px-1 text-green-600\">✓</div>
-                    <span class=\"ml-1\">{$testRun->readableMethodName()}</span>
+                    <span class=\"ml-1\">{$testRun->readableMethodName()} {$dataset}</span>
                     <span class='ml-1'><b>{$testRun->duration->miliseconds()}ms</b></span>
                 </div>
         ");
@@ -44,10 +46,10 @@ class DefaultPrinter implements Printer
         ");
     }
 
-    public function testRun(TestRun $testRun): void
+    public function testRun(TestRun $testRun, mixed $key = null): void
     {
         if ($testRun->succeeded()) {
-            $this->success($testRun);
+            $this->success($testRun, $key);
 
             return;
         }
